@@ -6,9 +6,11 @@ import { PriceMarker } from "@/components/priceMarker";
 import { Listing } from "@/components/listing";
 import { ListingsMap } from "@/components/map";
 import { useEffect, useRef, useState } from "react";
+import { ListingSkeletons } from "@/components/listingSkeleton";
 
 export default function Home() {
   const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef(null);
@@ -19,12 +21,13 @@ export default function Home() {
     let query = `?skip=${lastPost}&limit=8`;
     let res = await fetch("https://dummyjson.com/products" + query);
     let data = await res.json();
-
+    setLoading(false);
     setListings((pl) => pl.concat(data.products));
     lastPost++;
   };
 
   useEffect(() => {
+    getListings();
     getNavHeight();
   }, []);
 
@@ -64,6 +67,7 @@ export default function Home() {
             200+ stays in Bordeaux
           </div>
           <div className="grid grid-cols-2  lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6 w-full">
+            {loading && <ListingSkeletons listings={8} />}
             {listings.map(
               ({ description, title, thumbnail, price, id }): any => (
                 <Listing
