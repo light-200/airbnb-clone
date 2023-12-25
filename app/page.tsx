@@ -92,14 +92,13 @@ export default function Home() {
             <span ref={loaderRef}></span>
           </div>
         </div>
-        <div className={"hidden lg:flex justify-center relative"}>
-          <div className={"top-[var(--nav-height)] sticky bg-black h-fit"}>
+        <div className={"hidden lg:flex flex-1 justify-center relative"}>
+          <div
+            className={
+              "top-[var(--nav-height)] sticky bg-black h-[var(--map-height)] w-full"
+            }
+          >
             <ListingsMap />
-            <div className=" w-[217px] h-[402px] left-[186px] top-[89px] absolute">
-              <div className="w-[52px] h-7 left-[84px] top-[311px] absolute justify-start items-start inline-flex">
-                <PriceMarker price={"$200"} />
-              </div>
-            </div>
           </div>
         </div>
       </div>
