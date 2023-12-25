@@ -9,10 +9,10 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [listings, setListings] = useState([]);
-  const navRef = useRef(null);
-  const mapRef = useRef(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef(null);
-  let navHeight;
+  let navHeight: number;
   let lastPost = 0;
 
   let getListings = async () => {
@@ -29,8 +29,8 @@ export default function Home() {
   }, []);
 
   let getNavHeight = () => {
-    navHeight = navRef.current?.getBoundingClientRect().height;
-    mapRef.current?.style.setProperty("--nav-height", navHeight);
+    navHeight = navRef.current!!.getBoundingClientRect().height;
+    mapRef.current!!.style.setProperty("--nav-height", navHeight.toString());
   };
 
   let interSectionCallback = (entries: any) => {
