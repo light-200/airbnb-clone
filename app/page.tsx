@@ -14,10 +14,12 @@ export default function Home() {
   const navRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef(null);
+  let mapHeight: number;
   let navHeight: number;
   let lastPost = 0;
 
   let getListings = async () => {
+    if (lastPost > 1) return;
     let query = `?skip=${lastPost}&limit=8`;
     let res = await fetch("https://dummyjson.com/products" + query);
     let data = await res.json();
@@ -32,8 +34,16 @@ export default function Home() {
   }, []);
 
   let getNavHeight = () => {
-    navHeight = navRef.current!!.getBoundingClientRect().height;
-    mapRef.current!!.style.setProperty("--nav-height", navHeight.toString());
+    let navHeight = navRef.current!!.getBoundingClientRect().height;
+    mapHeight = window.innerHeight - navHeight;
+    mapRef.current!!.style.setProperty(
+      "--map-height",
+      mapHeight.toFixed(0) + "px"
+    );
+    mapRef.current!!.style.setProperty(
+      "--nav-height",
+      navHeight.toFixed(0) + "px"
+    );
   };
 
   let interSectionCallback = (entries: any) => {
@@ -51,17 +61,17 @@ export default function Home() {
   }, [loaderRef]);
 
   return (
-    <main className="flex min-h-screen flex-col h-screen relative">
+    <main ref={mapRef} className="flex min-h-screen flex-col h-screen relative">
       <div
         ref={navRef}
-        className="w-full bg-white  border border-gray-200 shadow-inner flex-col justify-start items-start flex sticky top-0 z-10"
+        className="w-full bg-white  border border-gray-200 shadow-inner flex-col justify-start items-start flex fixed top-0 z-10"
       >
         <Nav>
           <Search />
         </Nav>
         <Filters />
       </div>
-      <div className="flex h-full">
+      <div className="flex h-[200vh] mt-[var(--nav-height)]">
         <div className="flex flex-col gap-6 p-2 sm:p-6 overflow-y-auto w-[840px] flex-1 no-scrollbar">
           <div className="self-stretch text-black font-semibold text-sm leading-normal">
             200+ stays in Bordeaux
@@ -82,19 +92,13 @@ export default function Home() {
             <span ref={loaderRef}></span>
           </div>
         </div>
-        <div className={"hidden lg:flex flex-1 justify-center relative"}>
-          <div
-            ref={mapRef}
-            className={
-              "grid overflow-hidden w-full items-center shadow-inner sticky h-[80vh]" +
-              `top-[var(--nav-height)]`
-            }
-          >
+        <div className={"hidden lg:flex justify-center relative"}>
+          <div className={"top-[var(--nav-height)] sticky bg-black h-fit"}>
             <ListingsMap />
-          </div>
-          <div className=" w-[217px] h-[402px] left-[186px] top-[89px] absolute">
-            <div className="w-[52px] h-7 left-[84px] top-[311px] absolute justify-start items-start inline-flex">
-              <PriceMarker price={"$200"} />
+            <div className=" w-[217px] h-[402px] left-[186px] top-[89px] absolute">
+              <div className="w-[52px] h-7 left-[84px] top-[311px] absolute justify-start items-start inline-flex">
+                <PriceMarker price={"$200"} />
+              </div>
             </div>
           </div>
         </div>
