@@ -32,7 +32,24 @@ body {
     scrollbar-width: none; /* Firefox */
   }
 
+  .no-arrows::-webkit-outer-spin-button,
+  .no-arrows::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .no-arrows[type="number"] {
+    -moz-appearance: textfield;
+  }
+
   .map {
     --nav-height: 0;
+  }
+
+  .hover-shadow-effect {
+    @apply shadow-sm hover:shadow-md transition-shadow duration-200 ease-out;
+  }
+
+  .button-animate {
+    @apply hover:scale-[1.02] active:scale-[.98] transition-transform duration-200 ease-out select-none;
   }
 }

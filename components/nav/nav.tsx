@@ -26,11 +26,13 @@ export function Nav({ children }: { children: React.ReactNode }) {
       </div>
       {children}
       <div className="h-12 items-center gap-4 flex-1 justify-end min-w-[275.95px] hidden md:flex">
-        <div className="text-black text-sm font-medium leading-tight rounded-full p-2 px-3 h-8 hover:bg-gray-100 duration-200 ease-out whitespace-nowrap">
+        <div className="text-black text-sm font-medium leading-tight rounded-full p-2 px-3 h-8 hover:bg-gray-100 duration-200 ease-out whitespace-nowrap button-animate">
           Become a Host
         </div>
-        <TbWorld className="text-black w-5 h-5 relative" />
-        <div className="pl-4 pr-2 py-2 bg-white rounded-[100px] border border-gray-200 justify-start items-center gap-2 flex">
+        <div className="hover:bg-gray-100 duration-200 ease-out button-animate rounded-full p-2 px-3 h-8 inline-flex items-center">
+          <TbWorld className="text-black w-5 h-5 relative" />
+        </div>
+        <div className="pl-4 pr-2 py-2 bg-white rounded-[100px] border border-gray-200 hover-shadow-effect justify-start items-center gap-2 flex button-animate">
           <FiMenu className={"text-black w-5 h-5 relative"} />
           <div className="w-8 h-8 justify-center items-center flex">
             <div className="w-8 h-8 bg-gray-100 rounded-full justify-center items-center inline-flex">
