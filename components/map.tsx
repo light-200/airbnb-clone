@@ -1,18 +1,46 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Map, { ViewState } from "react-map-gl";
+import { getCenter } from "geolib";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Map, { Marker, Popup } from "react-map-gl";
+import { FaLocationDot } from "react-icons/fa6";
+import { PriceMarker } from "./priceMarker";
+import { ListingType } from "@/types/data";
 
-const accessToken =
-  "pk.eyJ1IjoibGlnaHQyMDAiLCJhIjoiY2xxbDB3aGttMXRsMzJrbzRpNHNvemd4MSJ9.8pvaeuXiS4WH2MAoLwarDA";
-
-export function ListingsMap() {
-  const mapRef = useRef(null);
+export function ListingsMap({ listings }: { listings: Array<ListingType> }) {
   const [viewport, setViewport] = useState({
-    latitude: 43,
-    longitude: -79,
-    zoom: 10,
+    latitude: 0,
+    longitude: 0,
+    zoom: 11,
   });
+
+  const [selectedLocation, setSelectedLocation] = useState<ListingType | null>(
+    null
+  );
+
+  const mapRef = useRef(null);
+
+  const coordinates: any = useMemo(
+    () =>
+      listings.map((listing) => ({
+        longitude: listing.long,
+        latitude: listing.lat,
+      })),
+    [listings]
+  );
+
+  console.log(selectedLocation);
+
+  useEffect(() => {
+    if (coordinates.length > 0) {
+      const center: any = getCenter(coordinates);
+      setViewport((prevViewport) => ({
+        ...prevViewport,
+        latitude: center && center.latitude,
+        longitude: center && center.longitude,
+      }));
+    }
+  }, [coordinates]);
 
   return (
     <Map
@@ -20,8 +48,33 @@ export function ListingsMap() {
       reuseMaps
       {...viewport}
       onMove={(evt) => setViewport(evt.viewState)}
-      style={{ width: "100%", height: "100%" }}
       mapStyle="mapbox://styles/mapbox/streets-v12"
-    />
+    >
+      {listings.map((listing: ListingType, i: number) => (
+        <div key={listing.long.toString() + listing.lat.toString() + i}>
+          <Marker
+            longitude={listing.long}
+            latitude={listing.lat}
+            anchor="bottom"
+          >
+            <span onClick={() => setSelectedLocation(listing)}>
+              <PriceMarker price={listing.price} />
+            </span>
+          </Marker>
+        </div>
+      ))}
+      {selectedLocation ? (
+        <Popup
+          longitude={selectedLocation.long}
+          latitude={selectedLocation.lat}
+          closeOnClick={false}
+          anchor="top"
+          onClose={() => setSelectedLocation(null)}
+        >
+          <div>{selectedLocation.title}</div>
+          <img width="100%" src={selectedLocation.img.toString()} />
+        </Popup>
+      ) : null}
+    </Map>
   );
 }

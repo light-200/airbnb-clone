@@ -17,7 +17,7 @@ export default function Search() {
   return (
     <div className="w-fit h-12 sm:pl-6 pl-4 pr-2 py-2 bg-white rounded-full hover-shadow-effect border border-gray-200 justify-start items-center gap-4 inline-flex">
       <input
-        className="outline-none text-center max-w-20 text-black text-sm font-medium leading-tight truncate"
+        className="outline-none max-w-20 text-black text-sm font-medium leading-tight truncate"
         value={data.location}
         onChange={handleInput}
         name="location"

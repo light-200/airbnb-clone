@@ -17,6 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </head>
       <SkeletonTheme baseColor="#ebebeb" highlightColor="#999">
         <body className={inter.className}>{children}</body>
       </SkeletonTheme>

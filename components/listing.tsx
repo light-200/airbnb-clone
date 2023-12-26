@@ -4,16 +4,16 @@ export function Listing({
   description,
   price,
 }: {
-  imageUrl: string;
-  title: string;
-  description: string;
-  price: string;
+  imageUrl: String;
+  title: String;
+  description: String;
+  price: String;
 }) {
   return (
     <div className="min-w-[150px] sm:min-w-[180px] max-w-[400px] w-full rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow duration-200 ease-out">
       <img
         className="w-full h-auto aspect-video object-cover object-center"
-        src={imageUrl}
+        src={imageUrl.toString()}
         alt="Placeholder"
       />
       <div className="p-3">
@@ -33,9 +33,8 @@ export function Listing({
             </div>
           </div>
           <div className="flex items-center text-sm sm:text-md">
-            <div className="text-gray-700 font-medium leading-7">${price}</div>
-            <div className="text-gray-700  font-normal leading-tight">
-              /night
+            <div className="text-gray-700 font-medium leading-tight">
+              ${price}
             </div>
           </div>
         </div>

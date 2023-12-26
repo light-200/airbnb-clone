@@ -2,14 +2,15 @@
 import Search from "@/components/nav/search";
 import { Nav } from "@/components/nav/nav";
 import { Filters } from "@/components/nav/filter";
-import { PriceMarker } from "@/components/priceMarker";
 import { Listing } from "@/components/listing";
 import { ListingsMap } from "@/components/map";
 import { useEffect, useRef, useState } from "react";
 import { ListingSkeletons } from "@/components/listingSkeleton";
+import { LISTINGS } from "@/utility";
+import { ListingType } from "@/types/data";
 
 export default function Home() {
-  const [listings, setListings] = useState([]);
+  const [listings, setListings] = useState<Array<ListingType>>([]);
   const [loading, setLoading] = useState(true);
   const navRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -20,17 +21,21 @@ export default function Home() {
 
   let getListings = async () => {
     if (lastPost > 1) return;
-    let query = `?skip=${lastPost}&limit=8`;
-    let res = await fetch("https://dummyjson.com/products" + query);
-    let data = await res.json();
+    let data1: Array<ListingType> = LISTINGS;
+
+    // const query = `?skip=${lastPost}&limit=8`;
+    // const url = "https://dummyjson.com/products";
+
+    // let res = await fetch(url + query);
+    // let data = await res.json();
     setLoading(false);
-    setListings((pl) => pl.concat(data.products));
+    setListings((pl) => pl.concat(data1));
     lastPost++;
   };
 
   useEffect(() => {
-    getListings();
     getNavHeight();
+    getListings();
   }, []);
 
   let getNavHeight = () => {
@@ -78,27 +83,25 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2  lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6 w-full">
             {loading && <ListingSkeletons listings={8} />}
-            {listings.map(
-              ({ description, title, thumbnail, price, id }): any => (
-                <Listing
-                  description={description}
-                  title={title}
-                  imageUrl={thumbnail}
-                  price={price}
-                  key={id}
-                />
-              )
-            )}
+            {listings.map(({ description, title, img, price }, i): any => (
+              <Listing
+                description={description}
+                title={title}
+                imageUrl={img}
+                price={price}
+                key={i}
+              />
+            ))}
             <span ref={loaderRef}></span>
           </div>
         </div>
-        <div className={"hidden lg:flex flex-1 justify-center relative"}>
+        <div className={"hidden lg:flex flex-1 justify-center"}>
           <div
             className={
-              "top-[var(--nav-height)] sticky bg-black h-[var(--map-height)] w-full"
+              "top-[var(--nav-height)] sticky bg-gray-500 h-[var(--map-height)] w-full"
             }
           >
-            <ListingsMap />
+            <ListingsMap listings={listings} />
           </div>
         </div>
       </div>
