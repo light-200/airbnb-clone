@@ -5,4 +5,5 @@ export type ListingType = {
   price: String;
   long: number;
   lat: number;
+  star: number;
 };

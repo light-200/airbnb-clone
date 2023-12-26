@@ -4,10 +4,11 @@ import { Nav } from "@/components/nav/nav";
 import { Filters } from "@/components/nav/filter";
 import { Listing } from "@/components/listing";
 import { ListingsMap } from "@/components/map";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ListingSkeletons } from "@/components/listingSkeleton";
 import { LISTINGS } from "@/utility";
 import { ListingType } from "@/types/data";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [listings, setListings] = useState<Array<ListingType>>([]);
@@ -16,7 +17,6 @@ export default function Home() {
   const mapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef(null);
   let mapHeight: number;
-  let navHeight: number;
   let lastPost = 0;
 
   let getListings = async () => {
@@ -33,23 +33,27 @@ export default function Home() {
     lastPost++;
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    function getNavHeight() {
+      if (navRef.current && mapRef.current) {
+        let navHeight = navRef.current.getBoundingClientRect().height;
+        mapHeight = window.innerHeight - navHeight;
+        document.documentElement.style.setProperty(
+          "--map-height",
+          `${mapHeight}px`
+        );
+        document.documentElement.style.setProperty(
+          "--nav-height",
+          `${navHeight}px`
+        );
+      }
+    }
     getNavHeight();
+  }, [listings]);
+
+  useEffect(() => {
     getListings();
   }, []);
-
-  let getNavHeight = () => {
-    let navHeight = navRef.current!!.getBoundingClientRect().height;
-    mapHeight = window.innerHeight - navHeight;
-    mapRef.current!!.style.setProperty(
-      "--map-height",
-      mapHeight.toFixed(0) + "px"
-    );
-    mapRef.current!!.style.setProperty(
-      "--nav-height",
-      navHeight.toFixed(0) + "px"
-    );
-  };
 
   let interSectionCallback = (entries: any) => {
     const [entry] = entries;
@@ -76,6 +80,7 @@ export default function Home() {
         </Nav>
         <Filters />
       </div>
+
       <div className="flex h-[200vh] mt-[var(--nav-height)]">
         <div className="flex flex-col gap-6 p-2 sm:p-6 overflow-y-auto w-[840px] flex-1 no-scrollbar">
           <div className="self-stretch text-black font-semibold text-sm leading-normal">
@@ -83,22 +88,26 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2  lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6 w-full">
             {loading && <ListingSkeletons listings={8} />}
-            {listings.map(({ description, title, img, price }, i): any => (
-              <Listing
-                description={description}
-                title={title}
-                imageUrl={img}
-                price={price}
-                key={i}
-              />
-            ))}
+            {listings.map(
+              ({ description, title, img, price, star }, i): any => (
+                <Listing
+                  description={description}
+                  title={title}
+                  imageUrl={img}
+                  price={price}
+                  key={i}
+                  index={i}
+                  star={star}
+                />
+              )
+            )}
             <span ref={loaderRef}></span>
           </div>
         </div>
         <div className={"hidden lg:flex flex-1 justify-center"}>
           <div
             className={
-              "top-[var(--nav-height)] sticky bg-gray-500 h-[var(--map-height)] w-full"
+              "top-[var(--nav-height)] sticky bg-gray-100 h-[var(--map-height)] w-full"
             }
           >
             <ListingsMap listings={listings} />

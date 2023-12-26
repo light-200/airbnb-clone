@@ -3,9 +3,22 @@
 import { getCenter } from "geolib";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
-import { FaLocationDot } from "react-icons/fa6";
 import { PriceMarker } from "./priceMarker";
 import { ListingType } from "@/types/data";
+
+const variants = {
+  initial: {
+    opacity: 0,
+    y: 10,
+  },
+  animate: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.2 * index,
+    },
+  }),
+};
 
 export function ListingsMap({ listings }: { listings: Array<ListingType> }) {
   const [viewport, setViewport] = useState({

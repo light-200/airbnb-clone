@@ -1,16 +1,42 @@
+import { once } from "events";
+import { motion } from "framer-motion";
+
+const variants = {
+  initial: {
+    opacity: 0,
+  },
+  animate: (index: number) => ({
+    opacity: 1,
+    transition: {
+      delay: 0.2 * index,
+    },
+  }),
+};
+
 export function Listing({
   imageUrl,
   title,
   description,
   price,
+  star,
+  index,
 }: {
   imageUrl: String;
   title: String;
   description: String;
   price: String;
+  star: number;
+  index: number;
 }) {
   return (
-    <div className="min-w-[150px] sm:min-w-[180px] max-w-[400px] w-full rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow duration-200 ease-out">
+    <motion.div
+      variants={variants}
+      initial="initial"
+      animate="animate"
+      viewport={{ once: true }}
+      custom={index}
+      className="min-w-[150px] sm:min-w-[180px] max-w-[400px] w-full rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow duration-200 ease-out"
+    >
       <img
         className="w-full h-auto aspect-video object-cover object-center"
         src={imageUrl.toString()}
@@ -26,7 +52,7 @@ export function Listing({
         <div className="flex justify-between items-center flex-1">
           <div className="flex items-center w-fit">
             <div className="text-gray-700 text-sm font-medium leading-tight">
-              5.0
+              {star}
             </div>
             <div className="text-gray-700 text-sm font-normal break-words truncate hidden sm:block">
               (318 reviews)
@@ -39,6 +65,6 @@ export function Listing({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -13,6 +13,8 @@
     --foreground-rgb: black;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --nav-height: 151.1999969482422px;
+    --map-height: 576.8000030517578px;
   }
 }
 
@@ -39,10 +41,6 @@ body {
   }
   .no-arrows[type="number"] {
     -moz-appearance: textfield;
-  }
-
-  .map {
-    --nav-height: 0;
   }
 
   .hover-shadow-effect {
