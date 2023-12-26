@@ -14,7 +14,6 @@ export default function Home() {
   const [listings, setListings] = useState<Array<ListingType>>([]);
   const [loading, setLoading] = useState(true);
   const navRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef(null);
   let mapHeight: number;
   let lastPost = 0;
@@ -35,7 +34,7 @@ export default function Home() {
 
   useLayoutEffect(() => {
     function getNavHeight() {
-      if (navRef.current && mapRef.current) {
+      if (navRef.current) {
         let navHeight = navRef.current.getBoundingClientRect().height;
         mapHeight = window.innerHeight - navHeight;
         document.documentElement.style.setProperty(
@@ -70,7 +69,7 @@ export default function Home() {
   }, [loaderRef]);
 
   return (
-    <main ref={mapRef} className="flex min-h-screen flex-col h-screen relative">
+    <main className="flex min-h-screen flex-col h-screen relative">
       <div
         ref={navRef}
         className="w-full bg-white  border border-gray-200 shadow-inner flex-col justify-start items-start flex fixed top-0 z-10"
